@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstring>
+#include <vector>
 using namespace std;
 
 struct registro{
@@ -66,6 +67,7 @@ int main(int argc, char const *argv[])
 	int i=0;
 	int registros_qtd=0;
 	int qtd_blocos=0;
+	vector<int> v;
 
 	while(!feof(myFile)){
 
@@ -77,6 +79,7 @@ int main(int argc, char const *argv[])
 			i++;
 			registros_qtd++;
 		}
+		v.push_back(i);
 		for(i=0;i<contador-1;i++){
 			bubbleLex(bloco,contador);
 			fprintf(tempFile,"%s:%s\n",bloco[i].nome,bloco[i].numero);
@@ -101,6 +104,25 @@ int main(int argc, char const *argv[])
 	printf("elem %d\n",elem);
 	for(i=0;i<(qtd_blocos+1);i++){                             
 		ch[0].registro=(Registro*)malloc(sizeof(Registro)*elem);
+	}
+	strcpy(ch[0].registro[0].nome,"teste");
+	printf("%s\n",ch[0].registro[0].nome );
+	
+	ch[0].begin=0;
+	for(i=1;i<qtd_blocos;i++){
+		ch[i].begin=v[i-1]*sizeof(Registro)+ch[i-1].begin;
+	}
+	char nome[20];
+	char telefone[10];
+	fseek(rolinha,13860,SEEK_SET);
+	fscanf(rolinha,"%[^:]:%[^\n]\n",nome,telefone);
+
+	printf("%s-%s\n",nome,telefone);
+	for(i=0;i<qtd_blocos;i++){
+		printf("%d\n",ch[i].begin );
+	}
+	for(i=0;i<v.size();i++){
+		cout<<v[i]<<" ";
 	}
 	return 0;
 }
